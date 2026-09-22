@@ -1,7 +1,7 @@
 import numpy as np
 
-data = np.loadtxt("mnist_train.csv", delimiter=',')
-test_data = np.loadtxt("mnist_test.csv", delimiter=',')
+data = np.loadtxt("mnist_train.csv", delimiter=',', skiprows=1)
+test_data = np.loadtxt("mnist_test.csv", delimiter=',', skiprows=1)
 
 labels = data[:, 0]
 pixels = data[:, 1:]
@@ -13,11 +13,12 @@ test_pixels = test_pixels / 255
 
 HID_SIZE = 100
 OUT_SIZE = 10
-BATCH_SIZE = 50
+BATCH_SIZE = 5000
 
-epoch = 50
-learningRate = 0.1
-dataNum = 10000
+epoch = 500
+learningRate = 0.05 *(50 / BATCH_SIZE)
+dataNum = 60000
+testDataNum = 1000
 
 hid = np.zeros((BATCH_SIZE, HID_SIZE))
 out = np.zeros((BATCH_SIZE, 10))
@@ -83,7 +84,7 @@ for i in range(epoch):
 
 #테스트 (일단은 디버깅을 해야하며 새로 불러오기 귀찮으니 학습시킨거 그대로 사용)
 correct = 0
-for i in range(0, 100, BATCH_SIZE):
+for i in range(0, testDataNum, BATCH_SIZE):
     batch_x = test_pixels[i:i+BATCH_SIZE]
     batch_y = test_labels[i:i+BATCH_SIZE]
     preds = np.argmax(forward(batch_x), axis=1)   # 배치 전체 예측, shape (BATCH_SIZE,)
